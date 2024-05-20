@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import { router } from "./routes/product.route.mjs";
 import dotenv from "dotenv";
+import { swaggerRouter } from "./routes/swagger.route.mjs";
 
 dotenv.config();
 
@@ -14,7 +15,9 @@ app.use(express.json());
 //para poder enviar form
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api/products", router);
+app.use("/v1/products", router);
+
+app.use("/v1/swagger", swaggerRouter);
 
 app.get("/", (req, res) => {
   res.send("Hello world!");
