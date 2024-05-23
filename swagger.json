@@ -21,6 +21,7 @@
         "summary": "Cadastro de produtos",
         "description": "Rota responsável por cadastrar novos produtos",
         "tags": ["Products"],
+        "security": [{ "bearerAuth": [] }],
         "requestBody": {
           "content": {
             "application/json": {
@@ -38,22 +39,145 @@
               }
             }
           }
+        },
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Product Already Exists!"
+          },
+          "201": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          }
         }
       },
-      "responses": {
-        "401": {
-          "description": "Unauthorized"
-        },
-        "400": {
-          "description": "Product Already Exists!"
-        },
-        "200": {
-          "description": "OK",
+      "get": {
+        "summary": "Busca de produtos",
+        "description": "Rota responsável por buscar os produtos",
+        "tags": ["Products"],
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Products"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/products/{id}": {
+      "get": {
+        "description": "Buscar um produto pelo seu id",
+        "summary": "Buscar um produto pelo seu id",
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do produto para busca",
+            "required": true
+          }
+        ],
+        "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "items": {
+                "$ref": "#/components/schemas/Products"
+              },
+              "examples": {
+                "product": {
+                  "value": {
+                    "name": "Iphone 15 Pro Max",
+                    "price": 5500.0,
+                    "quantity": 15
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Alterar um produto pelo seu id",
+        "summary": "Alterar um produto pelo seu id",
+        "tags": ["Products"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do produto para busca",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "$ref": "#/components/schemas/Products"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletar um produto pelo seu id",
+        "summary": "Deletar um produto pelo seu id",
+        "tags": ["Products"],
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id do produto para deletar",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
                   "$ref": "#/components/schemas/Products"
                 }
               }
@@ -76,8 +200,18 @@
           },
           "quantity": {
             "type": "number"
+          },
+          "id": {
+            "type": "string"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
